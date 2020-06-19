@@ -10,11 +10,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+let MONGODB_URI = process.env.MONGODB_URI ||  "mongodb://localhost/workout";
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useFindAndModify: false
+});
+
 app.use(express.static("public"));
 
 // routes
-app.use(require("./routes/api.js"));
-app.use(require("./routes/html.js"));
+require("./routes/api.js")(app);
+
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
